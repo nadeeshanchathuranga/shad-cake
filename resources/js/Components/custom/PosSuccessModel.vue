@@ -166,7 +166,7 @@ const productRows = props.products
               <td style="padding-left:14px; background:#f1f5f9; border:1px solid #ccc; border-radius:4px; font-size:11px;">
                * ${compName}
               </td>
-           
+
               <td style="text-align:center; background:#f1f5f9; border:1px solid #ccc; font-size:11px;">
                 ${compQty}
               </td>
@@ -289,7 +289,7 @@ const productRows = props.products
   <body>
       <div class="receipt-container">
                 <div class="header">
-                  <img src="/images/billlogo.png" style="width: 130px; height: 130px;" />
+                  <img src="/images/billlogo.png" style="width: 230px; height: 100px;" />
            ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ''}
   ${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ''}
   ${(companyInfo?.value?.phone || companyInfo?.value?.phone2 || companyInfo?.value?.email)

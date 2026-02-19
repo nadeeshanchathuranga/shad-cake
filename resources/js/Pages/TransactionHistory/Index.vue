@@ -334,7 +334,7 @@ $(document).ready(function () {
 <body>
   <div class="receipt-container">
     <div class="header">
-      <img src="/images/billlogo.png" style="width:300px;height:120px;" />
+      <img src="/images/billlogo.png" style="width:220px;height:100px;" />
       ${companyInfo?.value?.name ? `<h1>${companyInfo.value.name}</h1>` : ''}
       ${companyInfo?.value?.address ? `<p>${companyInfo.value.address}</p>` : ''}
       ${
