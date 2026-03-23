@@ -404,8 +404,8 @@ const productRows = props.products
   </html>
   `;
 
-    // Open a new window
-    const printWindow = window.open("", "_blank");
+    // Open a new window immediately from user click to avoid popup blockers.
+    const printWindow = window.open("", "_blank", "width=420,height=760");
     if (!printWindow) {
         alert("Failed to open print window. Please check your browser settings.");
         return;
@@ -416,11 +416,33 @@ const productRows = props.products
     printWindow.document.write(receiptHTML);
     printWindow.document.close();
 
-    // Wait for the content to load before triggering print
+    const tryPrint = () => {
+        try {
+            printWindow.focus();
+            printWindow.print();
+        } catch (e) {
+            console.error("Print failed:", e);
+        }
+    };
+
+    // Safari/macOS can miss onload after document.write, so provide timed fallback.
     printWindow.onload = () => {
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
+        setTimeout(tryPrint, 200);
+    };
+
+    setTimeout(() => {
+        if (!printWindow.closed) {
+            tryPrint();
+        }
+    }, 800);
+
+    // Close only after print flow finishes (do not close immediately on macOS).
+    printWindow.onafterprint = () => {
+        setTimeout(() => {
+            if (!printWindow.closed) {
+                printWindow.close();
+            }
+        }, 200);
     };
 };
 </script>
