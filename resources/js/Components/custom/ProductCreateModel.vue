@@ -469,7 +469,27 @@
                       <option value="weight_based">Weight Based</option>
                     </select>
                   </div>
-                  <div class="w-full"></div>
+                  <div class="w-full">
+                    <label
+                      for="stock_quantity"
+                      class="block text-sm font-medium text-gray-300"
+                      >Stock Quantity:</label
+                    >
+                    <input
+                      type="number"
+                      id="stock_quantity"
+                      v-model="form.stock_quantity"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      placeholder="Enter stock quantity"
+                      required
+                    />
+                    <span
+                      v-if="form.errors.stock_quantity"
+                      class="mt-2 text-red-500"
+                    >
+                      {{ form.errors.stock_quantity }}
+                    </span>
+                  </div>
                 </div>
 
                 <div class="flex items-center gap-8 mt-6">
@@ -498,29 +518,6 @@
                   </div>
                   <div class="w-full">
                     <label
-                      for="stock_quantity"
-                      class="block text-sm font-medium text-gray-300"
-                      >Stock Quantity:</label
-                    >
-                    <input
-                      type="number"
-                      id="stock_quantity"
-                      v-model="form.stock_quantity"
-                      class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                      placeholder="Enter stock quantity"
-                      required
-                    />
-                    <span
-                      v-if="form.errors.stock_quantity"
-                      class="mt-2 text-red-500"
-                    >
-                      {{ form.errors.stock_quantity }}
-                    </span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-8 mt-6">
-                  <div class="w-full">
-                    <label
                       for="selling_price"
                       class="block text-sm font-medium text-gray-300"
                       >Selling Price{{ form.type === 'weight_based' ? ' (per kg)' : '' }}:</label
@@ -541,6 +538,8 @@
                       {{ form.errors.selling_price }}
                     </span>
                   </div>
+                </div>
+                <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
                     <label
                       for="discount"
@@ -555,7 +554,7 @@
                       @blur="updateDiscountedPrice"
                       class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
                       placeholder="Enter discount percentage"
-                    />
+                    >
                   </div>
                   <div class="w-full">
                     <label

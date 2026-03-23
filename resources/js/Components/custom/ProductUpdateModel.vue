@@ -252,7 +252,22 @@
                       <option value="weight_based">Weight Based</option>
                     </select>
                   </div>
-                  <div class="w-full"></div>
+                  <div class="w-full">
+                    <label
+                      for="stock_quantity"
+                      class="block text-sm font-medium text-gray-300"
+                      >Stock Quantity:</label
+                    >
+
+                    <input
+                      type="number"
+                      id="stock_quantity"
+                      v-model="form.stock_quantity"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                      placeholder="Stock quantity"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div class="flex items-center gap-8 mt-6">
@@ -363,24 +378,7 @@
                 <div class="flex items-center gap-8 mt-6">
                   <div class="w-full">
                     <label
-                      for="stock_quantity"
-                      class="block text-sm font-medium text-gray-300"
-                      >Stock Quantity:</label
-                    >
-
-                    <input
-                      type="number"
-                      id="stock_quantity"
-                      v-model="form.stock_quantity"
-                      class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                      placeholder="Stock quantity"
-                      required
-                    />
-                  </div>
-
-                  <div class="w-full">
-                    <label
-                      for="image"
+                      for="supplier_id"
                       class="block text-sm font-medium text-gray-300"
                       >Supplier Name :</label
                     >
@@ -403,6 +401,7 @@
                       {{ form.errors.sub_id }}
                     </span>
                   </div>
+                  <div class="w-full"></div>
                 </div>
 
                 <div class="flex items-center gap-8 mt-6" v-if="isPharma">
