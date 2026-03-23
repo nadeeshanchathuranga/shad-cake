@@ -124,6 +124,11 @@ const handlePrintReceipt = () => {
 const productRows = props.products
     .map((product) => {
       const isPack = Number(product.is_promotion) === 1;
+            const formatQtyWithUnit = (qty, type) => {
+                const num = Number(qty || 0);
+                const normalized = Number(num.toFixed(3)).toString();
+                return type === "weight_based" ? `${normalized} kg` : normalized;
+            };
 
       const parentRow = `
         <tr>
@@ -131,7 +136,7 @@ const productRows = props.products
             ${product.name}
             ${isPack ? `` : ``}
           </td>
-          <td style="text-align:center;">${Number(product.quantity || 0)}</td>
+                    <td style="text-align:center;">${formatQtyWithUnit(product.quantity, product.type)}</td>
           <td>
             ${
               (product.discount > 0 && product.apply_discount)
@@ -168,7 +173,7 @@ const productRows = props.products
               </td>
 
               <td style="text-align:center; background:#f1f5f9; border:1px solid #ccc; font-size:11px;">
-                ${compQty}
+                                ${formatQtyWithUnit(compQty, pi.product?.type)}
               </td>
 
             </tr>
