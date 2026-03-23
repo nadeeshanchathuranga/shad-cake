@@ -181,7 +181,7 @@
                     >
                       {{ item.quantity }}
                     </p> -->
-                                        <input type="number" v-model="item.quantity" min="0"
+                                        <input type="number" v-model="item.quantity" :min="item.type === 'weight_based' ? 0.5 : 1" :step="item.type === 'weight_based' ? 0.5 : 1"
                                             class="bg-[#D9D9D9] border-2 border-black h-8 w-24 text-black flex justify-center items-center rounded text-center" />
                                         <p @click="decrementQuantity(item.id)"
                                             class="flex items-center justify-center w-8 h-8 text-white bg-black rounded cursor-pointer">
@@ -437,14 +437,18 @@ const removeCoupon = () => {
 const incrementQuantity = (id) => {
     const product = products.value.find((item) => item.id === id);
     if (product) {
-        product.quantity += 1;
+        const step = product.type === "weight_based" ? 0.5 : 1;
+        product.quantity = Number((Number(product.quantity || 0) + step).toFixed(3));
     }
 };
 
 const decrementQuantity = (id) => {
     const product = products.value.find((item) => item.id === id);
-    if (product && product.quantity > 1) {
-        product.quantity -= 1;
+    if (product) {
+        const step = product.type === "weight_based" ? 0.5 : 1;
+        if (Number(product.quantity) > step) {
+            product.quantity = Number((Number(product.quantity || 0) - step).toFixed(3));
+        }
     }
 };
 
@@ -605,7 +609,7 @@ const submitBarcode = async () => {
         const { product: fetchedProduct, error: fetchedError } = response.data;
 
         if (fetchedProduct) {
-            if (fetchedProduct.stock_quantity < 1) {
+            if (Number(fetchedProduct.stock_quantity) <= 0) {
                 isAlertModalOpen.value = true;
                 message.value = "Product is out of stock";
                 return;

@@ -183,7 +183,7 @@
                                     {{ stock.transaction_date || "N/A" }}
                                 </td>
                                 <td class="p-4 font-bold border-gray-200">
-                                    {{ stock.quantity || "N/A" }}
+                                    {{ stock.quantity != null ? formatQuantity(stock.quantity) : "N/A" }}
                                 </td>
 
                                 <td class="p-4 border-gray-200">
@@ -279,7 +279,7 @@ const downloadFilteredPDF = () => {
         stock.product?.name || "N/A",
         stock.transaction_type || "N/A",
         stock.transaction_date || "N/A",
-        stock.quantity || "N/A",
+        stock.quantity != null ? formatQuantity(stock.quantity) : "N/A",
         stock.product?.supplier?.name || "N/A",
         stock.reason || "N/A",
     ]);
@@ -291,6 +291,14 @@ const downloadFilteredPDF = () => {
     });
 
     doc.save("StockTransitions.pdf");
+};
+
+const formatQuantity = (value) => {
+    const num = Number(value);
+    if (Number.isNaN(num)) {
+        return value;
+    }
+    return Number(num.toFixed(3)).toString();
 };
 
 
