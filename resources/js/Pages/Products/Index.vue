@@ -260,7 +260,7 @@
                   v-if="product.stock_quantity > 0"
                   class="text-xl font-bold tracking-wider text-green-500"
                 >
-                  <i class="ri-checkbox-blank-circle-fill"></i> In Stock ({{ product.stock_quantity }})
+                  <i class="ri-checkbox-blank-circle-fill"></i> In Stock ({{ formatStockQuantity(product.stock_quantity) }})
                 </p>
                 <p v-else class="text-xl font-bold tracking-wider text-red-500">
                   <i class="ri-checkbox-blank-circle-fill"></i> Out of Stock
@@ -465,6 +465,12 @@ const openViewModal = (product) => {
 const openDeleteModal = (product) => {
   selectedProduct.value = product;
   isDeleteModalOpen.value = true;
+};
+
+const formatStockQuantity = (value) => {
+  const num = Number(value);
+  if (Number.isNaN(num)) return value;
+  return Number(num.toFixed(3)).toString();
 };
 
 const props = defineProps({

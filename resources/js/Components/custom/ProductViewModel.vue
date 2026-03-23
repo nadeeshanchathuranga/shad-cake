@@ -139,7 +139,7 @@
                     <div class="flex flex-col w-full">
                       <p class="text-[#00000099]">Quantity:</p>
                       <p class="font-bold text-black">
-                        {{ selectedProduct?.stock_quantity ?? "N/A" }}
+                        {{ formatStockQuantity(selectedProduct?.stock_quantity) }}
                       </p>
                     </div>
                   </div>
@@ -229,6 +229,13 @@ const formattedDate = computed(() =>
     ? dayjs(selectedProduct.created_at).format("Do MMMM YYYY")
     : ""
 );
+
+const formatStockQuantity = (value) => {
+  if (value == null) return "N/A";
+  const num = Number(value);
+  if (Number.isNaN(num)) return value;
+  return Number(num.toFixed(3)).toString();
+};
 
 
 

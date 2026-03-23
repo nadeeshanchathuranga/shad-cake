@@ -271,7 +271,10 @@ const form = useForm({
   color_id: props.product.color_id || "",
   cost_price: props.product.cost_price || null,
   selling_price: props.product.selling_price || null,
-  stock_quantity: props.product.stock_quantity || null,
+  stock_quantity:
+    props.product.stock_quantity != null
+      ? Number(props.product.stock_quantity)
+      : null,
   barcode: props.product.barcode || "",
   //   supplier_id: props.product.supplier_id || null,
   image: null,
