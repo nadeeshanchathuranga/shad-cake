@@ -222,6 +222,7 @@ $productsQuery = Product::with('category', 'color', 'size', 'supplier')
             'expire_date' => 'nullable|date',
             'batch_no' => 'nullable|max:50',
             'purchase_date' => 'nullable|date',
+            'type' => 'nullable|in:normal,weight_based',
         ]);
 
         // dd($validated);
@@ -421,7 +422,8 @@ $productsQuery = Product::with('category', 'color', 'size', 'supplier')
             'image' => 'nullable|max:2048',
             'expire_date' => 'nullable|date',
             'batch_no' => 'nullable|max:50',
-            'purchase_date' => 'nullable|date'
+            'purchase_date' => 'nullable|date',
+            'type' => 'nullable|in:normal,weight_based',
         ]);
 
         // Handle image update

@@ -29,6 +29,7 @@ class Product extends Model
         'total_quantity',
         'purchase_date',
         'is_promotion',
+        'type',
     ];
 
     // public static function boot()

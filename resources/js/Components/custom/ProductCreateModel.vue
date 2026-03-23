@@ -457,6 +457,21 @@
                     </div>
                   </div>
                 </div>
+                <!-- Type -->
+                <div class="flex items-center gap-8">
+                  <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-300">Type:</label>
+                    <select
+                      v-model="form.type"
+                      class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
+                    >
+                      <option value="normal">Normal</option>
+                      <option value="weight_based">Weight Based</option>
+                    </select>
+                  </div>
+                  <div class="w-full"></div>
+                </div>
+
                 <div class="flex items-center gap-8 mt-6">
                   <!-- Cost Price input -->
                   <div class="w-full">
@@ -508,14 +523,14 @@
                     <label
                       for="selling_price"
                       class="block text-sm font-medium text-gray-300"
-                      >Selling Price:</label
+                      >Selling Price{{ form.type === 'weight_based' ? ' (per kg)' : '' }}:</label
                     >
                     <input
                       type="text"
                       id="selling_price"
                       v-model="form.selling_price"
                       class="w-full px-4 py-2 mt-2 text-black bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-600"
-                      placeholder="Enter selling price"
+                      :placeholder="form.type === 'weight_based' ? 'Enter price per kg' : 'Enter selling price'"
                       @blur="updateDiscountedPrice"
                       required
                     />
@@ -666,8 +681,7 @@ const form = useForm({
   expire_date: null,
   batch_no: "",
   purchase_date: null,
-
-
+  type: "normal",
 });
 
 const isDialogOpen = ref(false);
