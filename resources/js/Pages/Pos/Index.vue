@@ -144,9 +144,7 @@
                             </div>
                             <div class="flex flex-col justify-between w-5/6">
                                 <p class="text-xl text-black">
-                                    {{ item.name }}
-
-
+                                    {{ item.name }}<span v-if="item.type === 'weight_based'" class="ml-1 text-sm font-semibold text-blue-600">(1kg)</span>
                                 </p>
 
                                 <div
