@@ -296,7 +296,7 @@
                 {{ s.order_id ? s.order_id : 'Service -' }} {{ s.service_name }}
               </td>
               <td class="p-3">{{ s.customer?.name ?? 'N/A' }}</td>
-              <td class="p-3 text-center">{{ saleQty(s) }}</td>
+              <td class="p-3 text-center">{{ saleQtyLabel(s) }}</td>
           <td class="p-3 num text-center">
   {{
     toMoney(
@@ -429,7 +429,7 @@
             <tr v-for="(p, i) in products" :key="p.id ?? i" class="border-b transition duration-200 hover:bg-gray-100">
               <td class="p-3 text-center">{{ i + 1 }}</td>
               <td class="p-3 font-bold">{{ p.name || 'N/A' }}</td>
-              <td class="p-3 text-center">{{ Number(p.sales_qty || 0) }}</td>
+              <td class="p-3 text-center">{{ productQtyLabel(p) }}</td>
               <td class="p-3 text-center">
                 {{ (Number(p.sales_qty || 0) * Number(p.selling_price || 0)).toFixed(2) }}
               </td>
@@ -534,6 +534,8 @@ const sales     = ref(props.sales);
 // Formatting helpers
 const toMoney   = (n) => (Number(n || 0)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const formatDate= (d) => (d ? new Date(d).toLocaleDateString() : "");
+const formatQty = (value) => Number(Number(value || 0).toFixed(3)).toString();
+const withKgIfWeight = (value, isWeightBased) => (isWeightBased ? `${formatQty(value)} kg` : formatQty(value));
 
 // Totals (inventory cards)
 const totalQty = computed(() => products.value.reduce((sum, p) => sum + (p.stock_quantity || 0), 0));
@@ -625,6 +627,15 @@ const chartOptions4 = { responsive: true, plugins: { legend: { display: true, po
 // ===== Sales Table helpers & totals (respect custom_discount_type) =====
 const itemsCount = (s) => (Array.isArray(s.sale_items) ? s.sale_items.length : 0);
 const saleQty    = (s) => (Array.isArray(s.sale_items) ? s.sale_items.reduce((n, it) => n + Number(it.quantity || 0), 0) : 0);
+const saleQtyLabel = (s) => {
+  if (!Array.isArray(s.sale_items) || s.sale_items.length === 0) {
+    return formatQty(0);
+  }
+  const allWeightBased = s.sale_items.every((it) => it.product?.type === "weight_based");
+  return withKgIfWeight(saleQty(s), allWeightBased);
+};
+
+const productQtyLabel = (p) => withKgIfWeight(Number(p.sales_qty || 0), p.type === "weight_based");
 
 // Convert custom discount to LKR based on type for a row
 const customDiscountLkr = (s) => {
@@ -796,6 +807,13 @@ const downloadSalesTablePDF = () => {
     return s.sale_items.reduce((total, item) => total + Number(item.quantity || 0), 0);
   };
 
+  const saleQtyLabel = (s) => {
+    const qty = saleQty(s);
+    const items = Array.isArray(s.sale_items) ? s.sale_items : [];
+    const allWeightBased = items.length > 0 && items.every((it) => it.product?.type === "weight_based");
+    return allWeightBased ? `${Number(qty.toFixed(3))} kg` : Number(qty.toFixed(3)).toString();
+  };
+
   // Convert custom discount to LKR (percent or fixed)
   const customDiscountLkr = (s) => {
     const gross = Number(s.total_amount || 0);
@@ -839,7 +857,7 @@ const downloadSalesTablePDF = () => {
     const date        = formatDate(s.sale_date);
     const orderNumber = s.order_id ? s.order_id : `Service - ${s.service_name || ""}`;
     const customer    = s.customer?.name ?? "N/A";
-    const qty         = saleQty(s);
+    const qty         = saleQtyLabel(s);
 
     // UI shows Final Selling Price = total_amount - custom_discount (percent handled)
     const grossNet    = Number(s.total_amount || 0) - customDiscountLkr(s);
@@ -853,7 +871,7 @@ const downloadSalesTablePDF = () => {
       date,
       orderNumber,
       customer,
-      qty.toString(),
+      qty,
       toMoney(grossNet),
       discounts,
       toMoney(cost),
@@ -960,7 +978,7 @@ const downloadStockTablePDF = () => {
 
   const filteredTotals = rows.reduce(
     (acc, r) => {
-      acc.qty += Number(r[2]) || 0;
+      acc.qty += toNumber(r[2]);
       acc.sales += toNumber(r[3]);
       acc.profit += toNumber(r[7]);
       return acc;
